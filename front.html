@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Message Sender</title>
+</head>
+<body>
+    <h1>Send Message to Raspberry Pi</h1>
+    <input type="text" id="inputText" placeholder="Enter your message">
+    <button onclick="sendMessage()">Send</button>
+
+    <h2>Response:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        async function sendMessage() {
+            const inputText = document.getElementById('inputText').value;
+            const responseElement = document.getElementById('response');
+
+            try {
+                const response = await fetch('http://localhost:5000/message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inputText })
+                });
+
+                const result = await response.json();
+                responseElement.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                responseElement.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
